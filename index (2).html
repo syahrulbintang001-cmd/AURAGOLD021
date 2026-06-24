@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraGold Hub - XAU/USD Live Feed & AI Intelligence</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for beautiful charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Inter & Playfair Display for premium look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-premium {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111315;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d97706;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b45309;
+        }
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(217, 119, 6, 0.15);
+        }
+        .glow-green {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+        .glow-red {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-[#0b0c0e] text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+
+    <!-- Membership Gate Screen (Auth Gate) -->
+    <div id="membership-gate-screen" class="fixed inset-0 z-[90] flex items-center justify-center bg-black/95 backdrop-blur-md hidden p-4">
+        <div class="bg-[#111315] border border-amber-500/30 rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div class="absolute -right-20 -top-20 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl"></div>
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/10 mx-auto mb-4 animate-pulse">
+                    <i class="fa-solid fa-gem text-black text-2xl"></i>
+                </div>
+                <h3 class="font-premium text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500">AuraGold VIP Gate</h3>
+                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-semibold mt-1">Sinyal Live & Edukasi Finansial Premium</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-zinc-400 text-xs font-semibold mb-1.5 block">Alamat Gmail Anda</label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-3.5 text-zinc-500 text-xs"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" id="gate-email" placeholder="contoh: trader@gmail.com" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:border-amber-500 outline-none placeholder:text-zinc-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-zinc-400 text-xs font-semibold mb-1.5 block">Password VIP <span class="text-zinc-500 font-normal">(Kosongkan untuk Free Member)</span></label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-3.5 text-zinc-500 text-xs"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="gate-password" placeholder="Masukkan password jika Anda member VIP..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:border-amber-500 outline-none placeholder:text-zinc-600">
+                    </div>
+                </div>
+                
+                <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3.5 text-xs text-zinc-400 leading-relaxed shadow-inner">
+                    <div class="flex items-start space-x-2.5">
+                        <i class="fa-solid fa-circle-info text-amber-500 text-sm mt-0.5 animate-pulse"></i>
+                        <div>
+                            <p class="text-zinc-300 font-semibold mb-1 text-[11px]">Butuh Akses VIP AuraGold?</p>
+                            <p class="text-[10px] text-zinc-400">Jika Anda ingin menjadi VIP member, silakan hubungi admin kami di nomor WhatsApp berikut:</p>
+                            <a href="https://wa.me/6283163122530" target="_blank" class="mt-2 inline-flex items-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 px-3 py-1.5 rounded-lg text-[10px] font-extrabold transition duration-200">
+                                <i class="fa-brands fa-whatsapp text-sm mr-1.5 text-emerald-500"></i> Hubungi Admin WA
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-2 grid grid-cols-1 gap-2">
+                    <button onclick="handleAuthGateSubmit('vip')" id="btn-gate-vip" class="w-full bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-extrabold py-3 rounded-xl text-xs transition duration-200 shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-crown text-sm"></i>
+                        <span>Masuk Sebagai VIP</span>
+                    </button>
+                    <button onclick="handleAuthGateSubmit('free')" id="btn-gate-free" class="w-full bg-zinc-900 hover:bg-zinc-850 text-zinc-300 border border-zinc-800 hover:text-white font-semibold py-3 rounded-xl text-xs transition duration-200 flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-hourglass-half text-sm text-amber-500"></i>
+                        <span>Akses Free Member (10 Menit)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership Lockout Screen (Expired Alert) -->
+    <div id="membership-lockout-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md hidden p-4">
+        <div class="bg-[#111315] border border-amber-500/30 rounded-2xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl"></div>
+            <div class="w-16 h-16 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-hourglass-end text-2xl animate-bounce"></i>
+            </div>
+            <h3 class="font-premium text-2xl font-bold text-white mb-2">Sesi Gratis Habis</h3>
+            <p class="text-zinc-400 text-xs leading-relaxed mb-4">Sesi percobaan gratis Anda telah berakhir. Untuk melanjutkan, silakan aktifkan akun VIP Anda.</p>
+            
+            <div class="space-y-4">
+                <div class="relative">
+                    <input type="password" id="expired-vip-password" placeholder="Masukkan Password VIP..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-white focus:border-amber-500 outline-none placeholder:text-zinc-600 text-center">
+                </div>
+                <button onclick="activateVIPFromExpiredScreen()" id="btn-expired-activate" class="w-full bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-extrabold py-3 rounded-xl text-xs transition duration-200 shadow-lg shadow-amber-500/20">
+                    Aktifkan Fitur VIP Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Key Settings Modal (AMAN UNTUK GITHUB) -->
+    <div id="api-key-modal" class="fixed inset-0 z-[95] flex items-center justify-center bg-black/90 backdrop-blur-sm hidden p-4">
+        <div class="bg-[#111315] border border-zinc-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-key text-amber-500 mr-2"></i> Pengaturan API AI
+                </h3>
+                <button onclick="closeApiKeyModal()" class="text-zinc-500 hover:text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <p class="text-xs text-zinc-400 mb-4 leading-relaxed">
+                Untuk menjaga keamanan di server publik (seperti GitHub Pages), masukkan API Key Gemini Anda di sini. Kunci ini hanya akan disimpan dengan aman di <strong>memori browser Anda (Local Storage)</strong> dan tidak akan pernah diunggah ke server.
+            </p>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider mb-1 block">Google Gemini API Key</label>
+                    <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none font-mono">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button onclick="saveApiKey()" class="flex-grow bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 rounded-xl text-xs transition duration-200">
+                        Simpan Kunci
+                    </button>
+                    <button onclick="clearApiKey()" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200" title="Hapus Kunci">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-[10px] text-zinc-500">
+                <i class="fa-solid fa-circle-info mr-1"></i> Belum punya? <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-amber-400 hover:underline">Dapatkan Gemini API Key Gratis di sini</a>.
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="bg-[#111315] border-b border-zinc-800 sticky top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                    <i class="fa-solid fa-gem text-black text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <span class="font-premium text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500">AuraGold</span>
+                    <span class="text-[10px] block text-zinc-500 tracking-widest font-semibold uppercase">Hub & Live Trading AI</span>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation (Desktop) -->
+            <nav class="hidden md:flex space-x-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 bg-amber-500 text-black shadow-md shadow-amber-500/20">
+                    <i class="fa-solid fa-satellite-dish mr-2"></i>Sinyal Live
+                </button>
+                <button onclick="switchTab('portfolio')" id="btn-portfolio" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white transition-all duration-300">
+                    <i class="fa-solid fa-wallet mr-2"></i>Hasil Trade
+                </button>
+                <button onclick="switchTab('outlook')" id="btn-outlook" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white transition-all duration-300">
+                    <i class="fa-solid fa-newspaper mr-2"></i>Berita AI
+                </button>
+                <button onclick="switchTab('education')" id="btn-education" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white transition-all duration-300">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>Edukasi
+                </button>
+            </nav>
+
+            <!-- Status, Connection & VIP Profile -->
+            <div class="flex items-center space-x-3">
+                <div id="user-profile-badge" class="hidden md:flex items-center bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-full text-xs text-zinc-300">
+                    <i class="fa-solid fa-circle-user mr-2 text-amber-500"></i>
+                    <span id="user-display-email" class="font-medium mr-2 max-w-[100px] truncate">memuat...</span>
+                    <span id="user-display-badge" class="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-amber-500 text-black">FREE</span>
+                </div>
+
+                <div id="free-timer-badge" class="hidden flex items-center bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-full text-xs text-red-400">
+                    <i class="fa-solid fa-clock-rotate-left mr-2 animate-spin"></i>
+                    <strong id="timer-countdown" class="ml-1 font-mono">10:00</strong>
+                </div>
+
+                <div id="connection-status" class="flex items-center bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full text-xs text-emerald-400 hidden sm:flex">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping mr-2"></span>
+                    <span class="hidden lg:inline">Server Global</span>
+                </div>
+
+                <!-- Tombol Settings AI -->
+                <button onclick="openApiKeyModal()" class="text-amber-500 hover:text-amber-400 bg-amber-500/10 border border-amber-500/20 text-sm p-1.5 rounded-lg transition" title="Pengaturan AI">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <button onclick="logoutMembership()" id="btn-logout" class="hidden text-zinc-500 hover:text-red-400 text-sm p-1.5 transition" title="Ganti Akun">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="md:hidden flex border-t border-zinc-800 justify-around py-2 bg-[#111315]">
+            <button onclick="switchTab('dashboard')" id="m-btn-dashboard" class="mobile-tab-btn flex flex-col items-center space-y-1 text-amber-500 text-[10px]">
+                <i class="fa-solid fa-satellite-dish text-lg"></i><span>Sinyal</span>
+            </button>
+            <button onclick="switchTab('portfolio')" id="m-btn-portfolio" class="mobile-tab-btn flex flex-col items-center space-y-1 text-zinc-500 text-[10px]">
+                <i class="fa-solid fa-wallet text-lg"></i><span>Hasil</span>
+            </button>
+            <button onclick="switchTab('outlook')" id="m-btn-outlook" class="mobile-tab-btn flex flex-col items-center space-y-1 text-zinc-500 text-[10px]">
+                <i class="fa-solid fa-newspaper text-lg"></i><span>Berita AI</span>
+            </button>
+            <button onclick="switchTab('education')" id="m-btn-education" class="mobile-tab-btn flex flex-col items-center space-y-1 text-zinc-500 text-[10px]">
+                <i class="fa-solid fa-graduation-cap text-lg"></i><span>Edukasi</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="toast-container" class="fixed top-20 right-4 z-[80] flex flex-col space-y-2 pointer-events-none"></div>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ==================== TAB: DASHBOARD & SIGNALS ==================== -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- XAU/USD Live Price Widget -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between glow-gold relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-5">
+                        <i class="fa-solid fa-coins text-9xl text-amber-500"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Spot Gold Live</span>
+                            <span id="gold-percentage-badge" class="text-emerald-400 text-xs flex items-center bg-emerald-500/10 px-2 py-0.5 rounded">
+                                <i class="fa-solid fa-arrow-trend-up mr-1"></i> +0.00%
+                            </span>
+                        </div>
+                        <h2 class="font-premium text-3xl font-bold mt-2 tracking-tight text-white flex items-baseline">
+                            $<span id="live-gold-price">--.--</span>
+                            <span class="text-xs text-zinc-500 ml-1">/oz</span>
+                        </h2>
+                        <p class="text-[10px] text-zinc-400 font-semibold uppercase tracking-wider mt-1 block">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 mr-1"></span> Binance API Server
+                        </p>
+                        <p class="text-zinc-500 text-[10px] mt-1" id="live-time-stamp">Mencoba memuat data langsung...</p>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-zinc-800/80 grid grid-cols-2 gap-2 text-center text-xs">
+                        <div class="bg-zinc-900/60 p-2 rounded-lg">
+                            <span class="text-zinc-500 block mb-1">Tertinggi</span>
+                            <span class="text-zinc-300 font-semibold" id="gold-high">$----.--</span>
+                        </div>
+                        <div class="bg-zinc-900/60 p-2 rounded-lg">
+                            <span class="text-zinc-500 block mb-1">Terendah</span>
+                            <span class="text-zinc-300 font-semibold" id="gold-low">$----.--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signal Status Card -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider block">Status Sinyal Terakhir</span>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1 rounded-lg text-sm font-bold flex items-center uppercase" id="latest-signal-type">
+                                    <i class="fa-solid fa-spinner animate-spin mr-1.5"></i> SCANNING
+                                </span>
+                                <span class="text-zinc-500 text-xs" id="signal-time-ago">Menghitung...</span>
+                            </div>
+                            <span class="text-amber-500 text-xs font-semibold bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded" id="signal-timeframe">H1 (1 Jam)</span>
+                        </div>
+                        <p class="text-zinc-300 text-xs mt-3" id="signal-summary-text">Menghitung indikator teknis (RSI, EMA, ATR) langsung dari data historis pasar global...</p>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-zinc-800/80 grid grid-cols-3 gap-2 text-center text-xs">
+                        <div>
+                            <span class="text-zinc-500 block mb-1 text-[10px]">Entry</span>
+                            <span class="text-white font-mono font-bold" id="signal-entry">$----.--</span>
+                        </div>
+                        <div>
+                            <span class="text-zinc-500 block mb-1 text-[10px]">Target TP</span>
+                            <span class="text-emerald-400 font-mono font-bold" id="signal-tp">$----.--</span>
+                        </div>
+                        <div>
+                            <span class="text-zinc-500 block mb-1 text-[10px]">Resiko SL</span>
+                            <span class="text-red-400 font-mono font-bold" id="signal-sl">$----.--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signal Accuracy Stats -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider block">Metrik Pasar Saat Ini</span>
+                        <div class="mt-4 space-y-3">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-500">RSI (14) Terkini:</span>
+                                <span id="metric-rsi" class="text-amber-400 font-mono font-bold">--.-- (Netral)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-500">Korelasi Tren EMA:</span>
+                                <span id="metric-ema-trend" class="text-zinc-300 font-bold">Memuat...</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-500">ATR Volatilitas (14):</span>
+                                <span id="metric-atr" class="text-zinc-300 font-mono font-bold">$--.--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mt-4 pt-4 border-t border-zinc-850">
+                        <div class="flex justify-between text-xs text-zinc-400">
+                            <span>Kekuatan Tren</span>
+                            <span class="text-emerald-400">Stabil</span>
+                        </div>
+                        <div class="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full w-[70%]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Market Sentiment AI -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between relative">
+                    <div>
+                        <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider flex items-center justify-between">
+                            Sentimen Pasar Real-time
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                            </span>
+                        </span>
+                        <div class="flex items-center justify-center mt-4">
+                            <div class="relative w-24 h-24 flex items-center justify-center">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="text-zinc-800" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="text-emerald-500" id="sentiment-bull-arc" stroke-dasharray="50, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="absolute text-center">
+                                    <span class="text-xl font-bold block" id="sentiment-bull-pct">50%</span>
+                                    <span class="text-[9px] text-zinc-400 uppercase tracking-widest font-bold" id="sentiment-label">NETRAL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs text-zinc-500 mt-2">
+                        <span>Bearish: <strong class="text-red-400 font-mono" id="sentiment-bear-pct">50%</strong></span>
+                        <span>Pasar: <strong class="text-emerald-400 uppercase font-bold font-mono">Aktif</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid 2: Interactive Chart and Active Signals List -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Interactive Chart Panel -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 lg:col-span-2 flex flex-col justify-between">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0 pb-4 border-b border-zinc-800/80">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center">
+                                <i class="fa-solid fa-chart-area text-amber-500 mr-2"></i> Grafik Harga Live XAU/USD
+                            </h3>
+                            <p class="text-zinc-500 text-xs">Merekam data langsung per 5 detik dari pergerakan perdagangan riil.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-zinc-400">Garis Referensi:</span>
+                            <button onclick="toggleChartIndicator('high')" id="indicator-high" class="px-2.5 py-1 rounded bg-zinc-800 text-[11px] text-zinc-300 hover:text-white transition">Harian Tertinggi</button>
+                            <button onclick="toggleChartIndicator('low')" id="indicator-low" class="px-2.5 py-1 rounded bg-zinc-800 text-[11px] text-zinc-300 hover:text-white transition">Harian Terendah</button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas for Chart.js -->
+                    <div class="relative w-full h-[320px] mt-4">
+                        <canvas id="xau-live-chart"></canvas>
+                    </div>
+
+                    <!-- Chart Control & Info -->
+                    <div class="flex justify-between items-center text-xs text-zinc-500 mt-4 pt-4 border-t border-zinc-800/50">
+                        <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 mr-1.5"></span>Spot Price Emas Saat Ini</span>
+                        <span class="flex items-center"><span class="w-2.5 h-0.5 bg-emerald-500 mr-1.5" style="border-top: 2.5px solid #10b981"></span>Harian Tertinggi</span>
+                        <span class="flex items-center"><span class="w-2.5 h-0.5 bg-red-500 mr-1.5" style="border-top: 2.5px solid #ef4444"></span>Harian Terendah</span>
+                    </div>
+                </div>
+
+                <!-- Signal List & Generator Controls -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between pb-4 border-b border-zinc-800/80">
+                            <div>
+                                <h3 class="text-lg font-bold text-white flex items-center">
+                                    <i class="fa-solid fa-bell text-amber-500 mr-2"></i> Signal Scanner
+                                </h3>
+                                <span class="text-[9px] text-emerald-400 block mt-0.5 uppercase tracking-wider font-semibold">
+                                    <i class="fa-solid fa-bolt mr-0.5"></i> Live Global TA Engine Active
+                                </span>
+                            </div>
+                            <button onclick="scanLiveMarketSignals()" id="scan-btn" class="text-xs bg-amber-500 hover:bg-amber-600 text-black font-semibold px-3 py-1.5 rounded-lg transition duration-200 flex items-center space-x-1">
+                                <i class="fa-solid fa-magnifying-glass-chart" id="scan-btn-icon"></i> <span id="scan-btn-text" class="hidden sm:inline">Scan Pasar</span>
+                            </button>
+                        </div>
+
+                        <!-- Signals Scrollbox -->
+                        <div class="space-y-3 mt-4 max-h-[340px] overflow-y-auto pr-1" id="signals-container">
+                            <!-- Signal cards will be injected dynamically here -->
+                        </div>
+                    </div>
+
+                    <!-- Quick Risk Management Tool -->
+                    <div class="mt-4 pt-4 border-t border-zinc-800/80 bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/50">
+                        <h4 class="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2">Kalkulator Lot & Resiko Terintegrasi</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <label class="text-zinc-500 block mb-1">Modal Akun ($)</label>
+                                <input type="number" id="calc-balance" value="1000" class="w-full bg-[#111315] border border-zinc-800 rounded p-1.5 text-center text-white font-mono focus:border-amber-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-zinc-500 block mb-1">Resiko Maks (%)</label>
+                                <input type="number" id="calc-risk" value="2" class="w-full bg-[#111315] border border-zinc-800 rounded p-1.5 text-center text-white font-mono focus:border-amber-500 outline-none">
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">Rekomendasi Lot XAU:</span>
+                            <span class="text-amber-400 font-bold font-mono" id="recommended-lot">0.05 Lot</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: HASIL TRADE (PORTFOLIO) ==================== -->
+        <section id="tab-portfolio" class="tab-content hidden space-y-6">
+            
+            <!-- Portfolio Top Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 relative overflow-hidden group hover:border-emerald-500/30 transition duration-300">
+                    <div class="absolute right-[-20px] top-[-20px] text-zinc-800/40 group-hover:text-emerald-500/10 transition duration-300">
+                        <i class="fa-solid fa-arrow-trend-up text-9xl"></i>
+                    </div>
+                    <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider block mb-2">Total Profit Bersih (Bulan Ini)</span>
+                    <h2 class="text-3xl font-bold text-emerald-400 font-mono">+1,245 Pips</h2>
+                    <p class="text-[10px] text-zinc-500 mt-2 flex items-center">
+                        <i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i> Setara estimasi +$124.50 (Lot 0.01)
+                    </p>
+                </div>
+
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 relative overflow-hidden group hover:border-amber-500/30 transition duration-300">
+                    <div class="absolute right-[-20px] top-[-20px] text-zinc-800/40 group-hover:text-amber-500/10 transition duration-300">
+                        <i class="fa-solid fa-bullseye text-9xl"></i>
+                    </div>
+                    <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider block mb-2">Akurasi Win Rate Sinyal</span>
+                    <h2 class="text-3xl font-bold text-amber-400 font-mono">82.5%</h2>
+                    <p class="text-[10px] text-zinc-500 mt-2 flex items-center">
+                        <i class="fa-solid fa-trophy text-amber-500 mr-1.5"></i> 33 Win / 7 Loss
+                    </p>
+                </div>
+
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 relative overflow-hidden group hover:border-blue-500/30 transition duration-300">
+                    <div class="absolute right-[-20px] top-[-20px] text-zinc-800/40 group-hover:text-blue-500/10 transition duration-300">
+                        <i class="fa-solid fa-vault text-9xl"></i>
+                    </div>
+                    <span class="text-zinc-400 text-xs font-semibold uppercase tracking-wider block mb-2">Pertumbuhan Akun Simulasi</span>
+                    <h2 class="text-3xl font-bold text-white font-mono">$1,124.50</h2>
+                    <p class="text-[10px] text-zinc-500 mt-2 flex items-center">
+                        <i class="fa-solid fa-arrow-up-right-dots text-blue-500 mr-1.5"></i> Dari saldo awal $1,000.00
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Equity Curve Chart -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 lg:col-span-2 flex flex-col justify-between">
+                    <div class="flex items-center justify-between pb-4 border-b border-zinc-800/80">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> Grafik Pertumbuhan Ekuitas
+                        </h3>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-3 py-1 rounded-lg text-[10px] font-bold uppercase">30 Hari Terakhir</span>
+                    </div>
+                    <div class="relative w-full h-[300px] mt-4">
+                        <canvas id="equity-history-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Closed Trades Table -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between pb-4 border-b border-zinc-800/80">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-history text-amber-500 mr-2"></i> Jurnal Trade (Tertutup)
+                        </h3>
+                    </div>
+                    
+                    <div class="space-y-3 mt-4 max-h-[300px] overflow-y-auto pr-1" id="trade-history-container">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: DAILY OUTLOOK & NEWS ==================== -->
+        <section id="tab-outlook" class="tab-content hidden space-y-6">
+            <!-- Header section with AI Generation -->
+            <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                    <div class="space-y-1">
+                        <span class="text-amber-500 text-xs font-semibold uppercase tracking-widest block">AI Market Analysis</span>
+                        <h2 class="font-premium text-2xl font-bold text-white">Daily Outlook Gold (XAU/USD)</h2>
+                        <p class="text-zinc-400 text-sm">Hasilkan analisis fundamental & teknikal hari ini menggunakan Gemini AI.</p>
+                    </div>
+                    <div>
+                        <button onclick="generateAILiveOutlook()" class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-extrabold rounded-xl transition duration-300 shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Hasilkan Outlook Hari Ini (AI)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Outlook Content grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- AI Outlook Report Panel -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-zinc-800/80">
+                        <h3 class="font-semibold text-white flex items-center">
+                            <i class="fa-solid fa-file-invoice-dollar text-amber-500 mr-2.5"></i>
+                            Laporan AI Outlook Terkini
+                        </h3>
+                        <span class="text-xs text-zinc-500 flex items-center bg-zinc-900 px-2 py-1 rounded">
+                            <i class="fa-solid fa-clock mr-1"></i> Updated Real-time
+                        </span>
+                    </div>
+
+                    <div class="prose prose-invert max-w-none text-zinc-300 text-sm leading-relaxed space-y-4" id="ai-outlook-container">
+                        <div class="space-y-3">
+                            <p class="font-semibold text-amber-400 text-base">⚠️ Silakan klik tombol "Hasilkan Outlook Hari Ini (AI)" di atas.</p>
+                            <p>Sistem AI kami akan memindai kondisi pasar dan fundamental terkini untuk mencocokkannya langsung dengan pergerakan harga emas saat ini secara objektif.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="bg-zinc-900/80 border border-zinc-800 p-4 rounded-xl">
+                                    <h4 class="text-sm font-bold text-emerald-400 mb-1"><i class="fa-solid fa-arrow-trend-up mr-1.5"></i> Skenario Bullish</h4>
+                                    <p class="text-xs text-zinc-400">Pelemahan indikator ekonomi AS atau ketegangan geopolitik timur tengah yang meningkat biasanya memicu dorongan penguatan harga.</p>
+                                </div>
+                                <div class="bg-zinc-900/80 border border-zinc-800 p-4 rounded-xl">
+                                    <h4 class="text-sm font-bold text-red-400 mb-1"><i class="fa-solid fa-arrow-trend-down mr-1.5"></i> Skenario Bearish</h4>
+                                    <p class="text-xs text-zinc-400">Pertumbuhan nilai obligasi Treasury AS dan rilis data ketenagakerjaan yang kuat (NFP) menekan pergerakan emas ke bawah.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Economic Calendar & News Feed Panel -->
+                <div class="space-y-6">
+                    <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 space-y-4">
+                        <h3 class="font-semibold text-white flex items-center pb-3 border-b border-zinc-800/80">
+                            <i class="fa-solid fa-calendar-day text-amber-500 mr-2.5"></i>
+                            Berita Ekonomi Berdampak Tinggi (USD)
+                        </h3>
+                        <div class="space-y-3" id="economic-calendar-list">
+                            <div class="bg-zinc-900/60 border-l-4 border-red-500 p-3 rounded-r-xl flex justify-between items-start">
+                                <div>
+                                    <span class="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-1.5 py-0.5 rounded font-bold uppercase">HIGH IMPACT</span>
+                                    <h4 class="text-xs font-bold text-zinc-200 mt-1">Keputusan Suku Bunga Federal Reserve</h4>
+                                    <p class="text-[10px] text-zinc-500 mt-0.5">Pertemuan FOMC Mendatang</p>
+                                </div>
+                                <div class="text-right text-xs">
+                                    <span class="text-zinc-500 block">Proyeksi</span>
+                                    <span class="font-semibold text-white font-mono">Stabil</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-zinc-900/60 border-l-4 border-red-500 p-3 rounded-r-xl flex justify-between items-start">
+                                <div>
+                                    <span class="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-1.5 py-0.5 rounded font-bold uppercase">HIGH IMPACT</span>
+                                    <h4 class="text-xs font-bold text-zinc-200 mt-1">Core CPI (Inflasi Konsumen) m/m</h4>
+                                    <p class="text-[10px] text-zinc-500 mt-0.5">Dirilis Bulanan</p>
+                                </div>
+                                <div class="text-right text-xs">
+                                    <span class="text-zinc-500 block">Konsensus</span>
+                                    <span class="font-semibold text-white font-mono">0.3%</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-zinc-900/60 border-l-4 border-amber-500 p-3 rounded-r-xl flex justify-between items-start">
+                                <div>
+                                    <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded font-bold uppercase">MED IMPACT</span>
+                                    <h4 class="text-xs font-bold text-zinc-200 mt-1">Klaim Pengangguran Awal AS</h4>
+                                    <p class="text-[10px] text-zinc-500 mt-0.5">Setiap Hari Kamis</p>
+                                </div>
+                                <div class="text-right text-xs">
+                                    <span class="text-zinc-500 block">Konsensus</span>
+                                    <span class="font-semibold text-white font-mono">218K</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-amber-950/40 to-yellow-950/10 border border-amber-500/20 rounded-2xl p-6 space-y-3">
+                        <h4 class="font-bold text-amber-400 flex items-center text-sm">
+                            <i class="fa-solid fa-circle-exclamation mr-2"></i> Hukum Korelasi Emas
+                        </h4>
+                        <p class="text-zinc-300 text-xs leading-relaxed">
+                            Secara umum, rilis data ekonomi AS yang lebih kuat dari perkiraan akan menguatkan Dolar AS (USD) dan sebaliknya **melemahkan Emas (XAU)**. data ekonomi AS yang memburuk akan mendukung reli kenaikan **harga emas**.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: EDUCATION & AI TUTOR ==================== -->
+        <section id="tab-education" class="tab-content hidden space-y-6">
+            
+            <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 glow-gold relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl"></div>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                    <div>
+                        <span class="text-amber-500 text-xs font-semibold uppercase tracking-widest block">Premium Resource Hub</span>
+                        <h2 class="font-premium text-xl font-bold text-white flex items-center">
+                            <i class="fa-solid fa-book-open text-amber-500 mr-2.5"></i> Perpustakaan Ebook & Teknikal Analisa (Gratis)
+                        </h2>
+                        <p class="text-zinc-400 text-xs mt-1">Ebook interaktif premium untuk menguasai metode naked trading, SMC, dan ketangguhan psikologi pasar.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-zinc-900/40 border border-zinc-800/80 rounded-xl p-5 hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between h-56 relative overflow-hidden group">
+                        <div class="absolute top-2 right-2 opacity-5 group-hover:opacity-10 transition duration-300">
+                            <i class="fa-solid fa-crown text-6xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Level: Pemula - Menengah</span>
+                            <h4 class="text-sm font-bold text-zinc-100 mt-2 mb-1 group-hover:text-amber-400 transition">Kitab Suci Price Action & Candlestick</h4>
+                            <p class="text-[11px] text-zinc-500 line-clamp-3">Menguasai seni naked trading bebas indikator rumit. Pelajari formasi pin bar, engulfing, dan penentuan level S/R horizontal akurat.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-3 pt-3 border-t border-zinc-800/60">
+                            <span class="text-[10px] text-zinc-400"><i class="fa-solid fa-file-lines mr-1 text-amber-500"></i> 3 Bab Lengkap</span>
+                            <button onclick="openEbook(1)" class="bg-amber-500 hover:bg-amber-600 text-black font-bold px-3 py-1.5 rounded-lg text-[10px] transition duration-200">
+                                Mulai Membaca <i class="fa-solid fa-chevron-right ml-1 text-[8px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900/40 border border-zinc-800/80 rounded-xl p-5 hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between h-56 relative overflow-hidden group">
+                        <div class="absolute top-2 right-2 opacity-5 group-hover:opacity-10 transition duration-300">
+                            <i class="fa-solid fa-cubes text-6xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Level: Menengah - Pro</span>
+                            <h4 class="text-sm font-bold text-zinc-100 mt-2 mb-1 group-hover:text-amber-400 transition">Smart Money Concepts & Liquidity</h4>
+                            <p class="text-[11px] text-zinc-500 line-clamp-3">Membongkar perangkap likuiditas institusi perbankan. Analisa struktur pasar (BOS/CHoCH), Order Block, dan Fair Value Gaps.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-3 pt-3 border-t border-zinc-800/60">
+                            <span class="text-[10px] text-zinc-400"><i class="fa-solid fa-file-lines mr-1 text-amber-500"></i> 3 Bab Lengkap</span>
+                            <button onclick="openEbook(2)" class="bg-amber-500 hover:bg-amber-600 text-black font-bold px-3 py-1.5 rounded-lg text-[10px] transition duration-200">
+                                Mulai Membaca <i class="fa-solid fa-chevron-right ml-1 text-[8px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900/40 border border-zinc-800/80 rounded-xl p-5 hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between h-56 relative overflow-hidden group">
+                        <div class="absolute top-2 right-2 opacity-5 group-hover:opacity-10 transition duration-300">
+                            <i class="fa-solid fa-brain text-6xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Level: Semua Level</span>
+                            <h4 class="text-sm font-bold text-zinc-100 mt-2 mb-1 group-hover:text-amber-400 transition">Psikologi & Jurnal Trading Berkinerja Tinggi</h4>
+                            <p class="text-[11px] text-zinc-500 line-clamp-3">Membangun mental baja menghadapi stress pasar. Mengelola bias FOMO, kalkulasi resiko drawdown ketat, dan jurnal audit disiplin.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-3 pt-3 border-t border-zinc-800/60">
+                            <span class="text-[10px] text-zinc-400"><i class="fa-solid fa-file-lines mr-1 text-amber-500"></i> 3 Bab Lengkap</span>
+                            <button onclick="openEbook(3)" class="bg-amber-500 hover:bg-amber-600 text-black font-bold px-3 py-1.5 rounded-lg text-[10px] transition duration-200">
+                                Mulai Membaca <i class="fa-solid fa-chevron-right ml-1 text-[8px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Education Learning Material Panel (Left Column) -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Index of Courses -->
+                    <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6">
+                        <h3 class="font-premium text-lg font-bold text-white pb-3 border-b border-zinc-800/80 mb-4">
+                            <i class="fa-solid fa-graduation-cap text-amber-500 mr-2"></i> Kurikulum Belajar Gold
+                        </h3>
+                        <div class="space-y-2">
+                            <button onclick="showLesson(1)" id="lesson-btn-1" class="lesson-btn w-full text-left p-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 font-semibold text-xs flex justify-between items-center transition">
+                                <span>1. Volatilitas & Karakter XAU/USD</span>
+                                <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                            <button onclick="showLesson(2)" id="lesson-btn-2" class="lesson-btn w-full text-left p-3 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 font-semibold text-xs flex justify-between items-center transition">
+                                <span>2. Memahami Korelasi Dolar & Emas</span>
+                                <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                            <button onclick="showLesson(3)" id="lesson-btn-3" class="lesson-btn w-full text-left p-3 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 font-semibold text-xs flex justify-between items-center transition">
+                                <span>3. Strategi Support & Resistance</span>
+                                <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                            <button onclick="showLesson(4)" id="lesson-btn-4" class="lesson-btn w-full text-left p-3 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 font-semibold text-xs flex justify-between items-center transition">
+                                <span>4. Psikologi & Manajemen Risiko</span>
+                                <i class="fa-solid fa-circle-play"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Lesson Content -->
+                    <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6" id="lesson-content-container">
+                        <div id="lesson-1" class="lesson-text space-y-3">
+                            <h4 class="text-sm font-bold text-amber-400">Pelajaran 1: Volatilitas & Karakter XAU/USD</h4>
+                            <p class="text-xs text-zinc-300 leading-relaxed">
+                                Emas adalah instrumen safe-haven paling likuid di dunia. Di pasar finansial, fluktuasi harian bisa berkisar antara 200 hingga 500 pips dalam kondisi normal, dan melonjak tajam saat rilis berita besar.
+                            </p>
+                            <ul class="text-xs text-zinc-500 list-disc list-inside space-y-1">
+                                <li>Sensitif terhadap isu konflik geopolitik global.</li>
+                                <li>Volatilitas puncak terjadi pada Sesi New York (19:00 - 02:00 WIB).</li>
+                                <li>Sangat patuh pada analisis teknikal dasar.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Interactive Tutor Chatbox -->
+                <div class="bg-[#111315] border border-zinc-800 rounded-2xl p-6 lg:col-span-2 flex flex-col h-[520px] justify-between">
+                    <div class="flex items-center justify-between pb-3 border-b border-zinc-800/80">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-amber-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Konsultasi Mentor AI Trading</h3>
+                                <p class="text-[10px] text-zinc-500">Ajukan pertanyaan taktis seputar teknik & manajemen risiko</p>
+                            </div>
+                        </div>
+                        <button onclick="clearChat()" class="text-xs text-zinc-500 hover:text-white transition"><i class="fa-solid fa-trash-can mr-1"></i> Bersihkan Sesi</button>
+                    </div>
+
+                    <div class="flex-grow overflow-y-auto my-4 p-2 space-y-3" id="chat-messages-container">
+                        <div class="flex items-start space-x-2.5 max-w-[85%]">
+                            <div class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-robot text-amber-400 text-[10px]"></i>
+                            </div>
+                            <div class="bg-zinc-900/80 border border-zinc-800/60 rounded-r-xl rounded-bl-xl p-3 text-xs text-zinc-300">
+                                Halo! Saya adalah **AuraGold Mentor AI**. Ada masalah atau konsep analisis teknikal trading emas yang ingin Anda diskusikan secara detail saat ini?
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-zinc-800/80 pt-3 flex items-center space-x-2">
+                        <input type="text" id="chat-input" onkeydown="handleChatKeydown(event)" placeholder="Ketik pertanyaan Anda (contoh: Bagaimana cara pasang Stop Loss yang aman?)..." class="flex-grow bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-amber-500 outline-none placeholder:text-zinc-600 font-medium">
+                        <button onclick="sendMessageToAITutor()" class="bg-amber-500 hover:bg-amber-600 text-black px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span class="hidden sm:inline">Kirim</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="bg-[#111315] border-t border-zinc-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-zinc-500 space-y-4 md:space-y-0">
+            <div>
+                <p>&copy; 2026 AuraGold Hub. Hak Cipta Dilindungi.</p>
+                <p class="mt-0.5 text-[10px] text-zinc-600">Dukungan API terpadu berjalan dengan stabil pada Hosting Statis.</p>
+            </div>
+            <div class="flex space-x-6 text-zinc-500">
+                <span class="hover:text-amber-500 cursor-help" onclick="showDisclaimer()"><i class="fa-solid fa-circle-info mr-1"></i> Disclaimer Sinyal & Risiko</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Ebook Reader Modal -->
+    <div id="ebook-reader-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm hidden transition-all duration-300">
+        <div class="bg-[#111315] border border-zinc-800 rounded-2xl max-w-2xl w-full h-[85vh] flex flex-col justify-between overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="bg-[#16181b] p-5 border-b border-zinc-800 flex justify-between items-center">
+                <div>
+                    <span class="text-[10px] text-amber-500 font-semibold tracking-widest uppercase block" id="ebook-modal-series">AuraGold Library</span>
+                    <h3 class="text-base font-bold text-white font-premium" id="ebook-modal-title">Judul Ebook</h3>
+                </div>
+                <button onclick="closeEbook()" class="text-zinc-500 hover:text-white transition bg-zinc-900 border border-zinc-800 w-8 h-8 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <div class="flex-grow p-6 overflow-y-auto text-zinc-300 text-sm leading-relaxed space-y-4 max-h-[calc(85vh-160px)]" id="ebook-modal-content">
+            </div>
+
+            <div class="bg-[#16181b] p-4 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <div class="w-24 bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                        <div id="ebook-progress-bar" class="bg-amber-500 h-full transition-all duration-300" style="width: 33%"></div>
+                    </div>
+                    <span class="text-[10px] text-zinc-500" id="ebook-progress-text">Bab 1 dari 3</span>
+                </div>
+                <div class="flex space-x-2 w-full sm:w-auto justify-end">
+                    <button id="ebook-prev-btn" onclick="prevEbookChapter()" class="w-1/2 sm:w-auto bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 hover:text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition">
+                        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                        <span>Sebelumnya</span>
+                    </button>
+                    <button id="ebook-next-btn" onclick="nextEbookChapter()" class="w-1/2 sm:w-auto bg-amber-500 hover:bg-amber-600 text-black font-extrabold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition">
+                        <span>Selanjutnya</span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase Instances
+        window.firebaseApp = null;
+        window.db = null;
+        window.auth = null;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'auragold-hub-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "mock-api-key",
+            authDomain: "mock.firebaseapp.com",
+            projectId: "mock-project",
+            storageBucket: "mock.appspot.com",
+            messagingSenderId: "00000000",
+            appId: "1:000:web:000"
+        };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        /* ==================== GLOBAL STATES & SETUP ==================== */
+        // SEKARANG MENGAMBIL DARI LOCAL STORAGE (AMAN UNTUK GITHUB)
+        let apiKey = localStorage.getItem('auragold_gemini_api_key') || ''; 
+        
+        let currentTab = 'dashboard';
+        
+        let liveGoldPrice = 0.0;
+        let goldHigh = 0.0;
+        let goldLow = 0.0;
+        let priceChangePercent = 0.0;
+        let isFirstLoad = true;
+
+        let chartInstance = null;
+        let equityChartInstance = null;
+        let chartDataPoints = [];
+        let chartLabels = [];
+        let activeIndicators = { high: false, low: false };
+        let activeSignals = [];
+
+        const tradeHistoryData = [
+            { id: 'TRD-082', type: 'BUY', price: 2341.50, closePrice: 2346.50, status: 'WIN', pips: '+500 Pips', date: 'Hari Ini, 14:30 WIB' },
+            { id: 'TRD-081', type: 'SELL', price: 2355.20, closePrice: 2351.20, status: 'WIN', pips: '+400 Pips', date: 'Kemarin, 20:15 WIB' },
+            { id: 'TRD-080', type: 'BUY', price: 2350.00, closePrice: 2348.50, status: 'LOSS', pips: '-150 Pips', date: 'Kemarin, 16:45 WIB' },
+            { id: 'TRD-079', type: 'SELL', price: 2360.80, closePrice: 2355.80, status: 'WIN', pips: '+500 Pips', date: '2 Hari Lalu, 09:10 WIB' },
+            { id: 'TRD-078', type: 'BUY', price: 2345.10, closePrice: 2345.10, status: 'BEP', pips: '0 Pips (Breakeven)', date: '2 Hari Lalu, 14:00 WIB' }
+        ];
+
+        let currentUserMembership = null;
+        let membershipTimerInterval = null;
+
+        const lessons = {
+            1: { title: "1. Volatilitas & Karakter XAU/USD", content: `<h4 class="text-sm font-bold text-amber-400 mb-2">Pelajaran 1</h4><p class="text-xs text-zinc-300">Emas adalah instrumen safe-haven populer...</p>` },
+            2: { title: "2. Memahami Korelasi Dolar", content: `<h4 class="text-sm font-bold text-amber-400 mb-2">Pelajaran 2</h4><p class="text-xs text-zinc-300">Dolar menguat, emas turun. Dolar melemah, emas naik.</p>` },
+            3: { title: "3. Strategi Support & Resistance", content: `<h4 class="text-sm font-bold text-amber-400 mb-2">Pelajaran 3</h4><p class="text-xs text-zinc-300">Tunggu konfirmasi rejection sebelum buy.</p>` },
+            4: { title: "4. Psikologi & Risiko", content: `<h4 class="text-sm font-bold text-amber-400 mb-2">Pelajaran 4</h4><p class="text-xs text-zinc-300">Batasi resiko 1-2% dari modal.</p>` }
+        };
+
+        window.onload = async function() {
+            initChart();
+            initEquityChart(); 
+            renderTradeHistory(); 
+            
+            await initFirebaseConnection();
+
+            fetchBinanceGoldData();
+            setInterval(fetchBinanceGoldData, 5000);
+
+            document.getElementById('calc-balance').addEventListener('input', calculateRecommendedLot);
+            document.getElementById('calc-risk').addEventListener('input', calculateRecommendedLot);
+        };
+
+        /* ==================== API KEY MANAGER ==================== */
+        function openApiKeyModal() {
+            document.getElementById('input-api-key').value = apiKey; // Show existing key if any
+            document.getElementById('api-key-modal').classList.remove('hidden');
+        }
+
+        function closeApiKeyModal() {
+            document.getElementById('api-key-modal').classList.add('hidden');
+        }
+
+        function saveApiKey() {
+            const inputVal = document.getElementById('input-api-key').value.trim();
+            if(inputVal) {
+                apiKey = inputVal;
+                localStorage.setItem('auragold_gemini_api_key', apiKey);
+                triggerToast("Tersimpan", "API Key berhasil diamankan di browser Anda.", "success");
+                closeApiKeyModal();
+            } else {
+                triggerToast("Kosong", "Masukkan teks API Key yang valid.", "danger");
+            }
+        }
+
+        function clearApiKey() {
+            apiKey = '';
+            localStorage.removeItem('auragold_gemini_api_key');
+            document.getElementById('input-api-key').value = '';
+            triggerToast("Dihapus", "API Key telah dihapus dari memori lokal.", "info");
+        }
+
+        /* ==================== FIREBASE OFFLINE-SAFE AUTHENTICATION ==================== */
+        async function initFirebaseConnection() {
+            try {
+                if (firebaseConfig.apiKey === "mock-api-key") {
+                    setupOfflineFallbackAuth();
+                    return;
+                }
+                window.firebaseApp = initializeApp(firebaseConfig);
+                window.auth = getAuth(window.firebaseApp);
+                window.db = getFirestore(window.firebaseApp);
+
+                if (initialAuthToken) await signInWithCustomToken(window.auth, initialAuthToken);
+                else await signInAnonymously(window.auth);
+
+                const user = window.auth.currentUser;
+                if (user) {
+                    const localData = localStorage.getItem('auragold_local_membership');
+                    if (localData) {
+                        const parsed = JSON.parse(localData);
+                        currentUserMembership = parsed;
+                        applyMembershipRights(parsed);
+                    } else await pullUserMembershipStatus(user.uid);
+                } else setupOfflineFallbackAuth();
+            } catch (err) { setupOfflineFallbackAuth(); }
+        }
+
+        async function pullUserMembershipStatus(uid) {
+            try {
+                if (!window.db) { setupOfflineFallbackAuth(); return; }
+                const docRef = doc(window.db, 'artifacts', appId, 'users', uid, 'membership', 'status');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    localStorage.setItem('auragold_local_membership', JSON.stringify(data));
+                    currentUserMembership = data;
+                    applyMembershipRights(data);
+                } else showAuthGateOverlay();
+            } catch (err) { setupOfflineFallbackAuth(); }
+        }
+
+        function showAuthGateOverlay() { document.getElementById('membership-gate-screen').classList.remove('hidden'); }
+        function hideAuthGateOverlay() { document.getElementById('membership-gate-screen').classList.add('hidden'); }
+
+        async function handleAuthGateSubmit(intendedRole) {
+            const emailInput = document.getElementById('gate-email').value.trim();
+            const passwordInput = document.getElementById('gate-password').value.trim();
+            
+            if (!emailInput || !emailInput.includes('@') || !emailInput.toLowerCase().endsWith('.com')) {
+                triggerToast("Gmail Tidak Valid", "Silakan masukkan alamat email Gmail.", "danger"); return;
+            }
+
+            const btnGateVip = document.getElementById('btn-gate-vip');
+            const btnGateFree = document.getElementById('btn-gate-free');
+            btnGateVip.setAttribute('disabled', 'true'); btnGateFree.setAttribute('disabled', 'true');
+
+            const uid = window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'offline-simulated-user';
+            const now = Date.now();
+            let membershipData = null;
+
+            if (intendedRole === 'vip') {
+                if (passwordInput === 'tredercerdas') {
+                    membershipData = { email: emailInput, role: 'vip', createdAt: now, expiresAt: null };
+                    triggerToast("VIP Diaktifkan!", "Selamat datang member VIP AuraGold!", "success");
+                } else {
+                    triggerToast("Password Salah", "Password VIP tidak valid.", "danger");
+                    btnGateVip.removeAttribute('disabled'); btnGateFree.removeAttribute('disabled');
+                    return;
+                }
+            } else {
+                const tenMinutesLater = now + (10 * 60 * 1000);
+                membershipData = { email: emailInput, role: 'free', createdAt: now, expiresAt: tenMinutesLater };
+                triggerToast("Free Member Aktif", "Percobaan 10 menit Anda telah dimulai.", "info");
+            }
+
+            try {
+                localStorage.setItem('auragold_local_membership', JSON.stringify(membershipData));
+                if (window.db && uid !== 'offline-simulated-user') {
+                    const docRef = doc(window.db, 'artifacts', appId, 'users', uid, 'membership', 'status');
+                    await setDoc(docRef, membershipData);
+                }
+            } catch (err) { } 
+            finally {
+                currentUserMembership = membershipData;
+                applyMembershipRights(membershipData);
+                hideAuthGateOverlay();
+                btnGateVip.removeAttribute('disabled'); btnGateFree.removeAttribute('disabled');
+            }
+        }
+
+        function applyMembershipRights(membership) {
+            document.getElementById('user-profile-badge').classList.remove('hidden');
+            document.getElementById('btn-logout').classList.remove('hidden');
+            document.getElementById('user-display-email').innerText = membership.email;
+
+            if (membershipTimerInterval) clearInterval(membershipTimerInterval);
+
+            if (membership.role === 'vip') {
+                document.getElementById('user-display-badge').innerText = "VIP MEMBER";
+                document.getElementById('user-display-badge').className = "px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-amber-500 text-black glow-gold";
+                document.getElementById('free-timer-badge').classList.add('hidden');
+                document.getElementById('membership-lockout-screen').classList.add('hidden');
+            } else {
+                document.getElementById('user-display-badge').innerText = "FREE";
+                document.getElementById('user-display-badge').className = "px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-zinc-800 text-zinc-400";
+                document.getElementById('free-timer-badge').classList.remove('hidden');
+                const now = Date.now();
+                if (membership.expiresAt <= now) triggerLockoutExpiredScreen();
+                else {
+                    document.getElementById('membership-lockout-screen').classList.add('hidden');
+                    startFreeMembershipCountdown(membership.expiresAt);
+                }
+            }
+        }
+
+        function startFreeMembershipCountdown(expiresAt) {
+            membershipTimerInterval = setInterval(() => {
+                const timeLeft = expiresAt - Date.now();
+                if (timeLeft <= 0) { clearInterval(membershipTimerInterval); triggerLockoutExpiredScreen(); } 
+                else {
+                    const m = Math.floor(timeLeft / 60000); const s = Math.floor((timeLeft % 60000) / 1000);
+                    document.getElementById('timer-countdown').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function triggerLockoutExpiredScreen() {
+            document.getElementById('membership-lockout-screen').classList.remove('hidden');
+            document.getElementById('free-timer-badge').classList.add('hidden');
+            triggerToast("Waktu Habis", "Sesi 10 menit kedaluwarsa.", "danger");
+        }
+
+        async function activateVIPFromExpiredScreen() {
+            const pwd = document.getElementById('expired-vip-password').value.trim();
+            if (pwd === 'tredercerdas') {
+                const updatedMembership = { ...currentUserMembership, role: 'vip', expiresAt: null };
+                try { localStorage.setItem('auragold_local_membership', JSON.stringify(updatedMembership)); } catch (err) {} 
+                currentUserMembership = updatedMembership;
+                applyMembershipRights(updatedMembership);
+                document.getElementById('membership-lockout-screen').classList.add('hidden');
+                triggerToast("VIP Aktif!", "Nikmati fitur tanpa batas!", "success");
+            } else triggerToast("Password Salah", "Kata sandi tidak cocok.", "danger");
+        }
+
+        async function logoutMembership() {
+            localStorage.removeItem('auragold_local_membership');
+            document.getElementById('gate-email').value = ''; document.getElementById('gate-password').value = '';
+            if (membershipTimerInterval) clearInterval(membershipTimerInterval);
+            document.getElementById('user-profile-badge').classList.add('hidden');
+            document.getElementById('free-timer-badge').classList.add('hidden');
+            document.getElementById('btn-logout').classList.add('hidden');
+            showAuthGateOverlay(); triggerToast("Keluar", "Sesi ditutup.", "info");
+        }
+
+        function setupOfflineFallbackAuth() {
+            const data = localStorage.getItem('auragold_local_membership');
+            if (data) { try { const p = JSON.parse(data); currentUserMembership = p; applyMembershipRights(p); hideAuthGateOverlay(); return; } catch (e) {} }
+            showAuthGateOverlay();
+        }
+
+        /* ==================== REAL-TIME BINANCE FETCH MODULE ==================== */
+        async function fetchBinanceGoldData() {
+            try {
+                const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=PAXGUSDT');
+                if (!res.ok) throw new Error("API gagal.");
+                const data = await res.json();
+                liveGoldPrice = parseFloat(data.lastPrice); goldHigh = parseFloat(data.highPrice); goldLow = parseFloat(data.lowPrice); priceChangePercent = parseFloat(data.priceChangePercent);
+
+                document.getElementById('live-gold-price').innerText = liveGoldPrice.toFixed(2);
+                document.getElementById('gold-high').innerText = `$${goldHigh.toFixed(2)}`;
+                document.getElementById('gold-low').innerText = `$${goldLow.toFixed(2)}`;
+                
+                const pctBadge = document.getElementById('gold-percentage-badge');
+                if (priceChangePercent >= 0) {
+                    pctBadge.className = "text-emerald-400 text-xs flex items-center bg-emerald-500/10 px-2 py-0.5 rounded";
+                    pctBadge.innerHTML = `<i class="fa-solid fa-arrow-trend-up mr-1"></i> +${priceChangePercent.toFixed(2)}%`;
+                } else {
+                    pctBadge.className = "text-red-400 text-xs flex items-center bg-red-500/10 px-2 py-0.5 rounded";
+                    pctBadge.innerHTML = `<i class="fa-solid fa-arrow-trend-down mr-1"></i> ${priceChangePercent.toFixed(2)}%`;
+                }
+
+                document.getElementById('connection-status').className = "flex items-center bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full text-xs text-emerald-400 hidden sm:flex";
+                document.getElementById('live-time-stamp').innerText = `Diperbarui: ${new Date().toLocaleTimeString()}`;
+
+                if (isFirstLoad) { isFirstLoad = false; generateHistoricalInitialChart(liveGoldPrice); scanLiveMarketSignals(true); calculateRecommendedLot(); } 
+                else updateLiveChartTick(liveGoldPrice);
+            } catch (err) {}
+        }
+
+        /* ==================== INTERACTIVE CHART LOGIC ==================== */
+        function initChart() {
+            const ctx = document.getElementById('xau-live-chart').getContext('2d');
+            for (let i = 0; i < 20; i++) { chartLabels.push(""); chartDataPoints.push(null); }
+            chartInstance = new Chart(ctx, {
+                type: 'line', data: { labels: chartLabels, datasets: [{ label: 'Harga Live', data: chartDataPoints, borderColor: '#f59e0b', borderWidth: 2.5, backgroundColor: 'rgba(245, 158, 11, 0.05)', fill: true, tension: 0.1, pointRadius: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(39, 39, 42, 0.3)' } }, y: { grid: { color: 'rgba(39, 39, 42, 0.3)' } } } }
+            });
+        }
+
+        function generateHistoricalInitialChart(currentPrice) {
+            let startingPrice = currentPrice - 8.00; const now = new Date(); chartDataPoints = []; chartLabels = [];
+            for (let i = 20; i > 0; i--) { const pastTime = new Date(now.getTime() - (i * 30000)); startingPrice += (Math.random() - 0.48) * 2; chartDataPoints.push(parseFloat(startingPrice.toFixed(2))); chartLabels.push(`${pastTime.getHours()}:${pastTime.getMinutes()}:${pastTime.getSeconds()}`); }
+            chartDataPoints.push(currentPrice); chartLabels.push(`${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); chartInstance.update();
+        }
+
+        function updateLiveChartTick(priceVal) {
+            if (!chartInstance) return; const now = new Date(); chartDataPoints.shift(); chartDataPoints.push(priceVal); chartLabels.shift(); chartLabels.push(`${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); chartInstance.update('none');
+        }
+
+        function toggleChartIndicator(indicator) {
+            const btn = document.getElementById(`indicator-${indicator}`); activeIndicators[indicator] = !activeIndicators[indicator];
+            if (activeIndicators[indicator]) {
+                btn.className = "px-2.5 py-1 rounded bg-amber-500 text-xs text-black font-semibold transition";
+                if (indicator === 'high') addChartHorizontalLine('high-line', goldHigh, '#10b981'); else addChartHorizontalLine('low-line', goldLow, '#ef4444');
+            } else {
+                btn.className = "px-2.5 py-1 rounded bg-zinc-800 text-xs text-zinc-300 hover:text-white transition";
+                removeChartHorizontalLine(indicator === 'high' ? 'high-line' : 'low-line');
+            }
+        }
+
+        function addChartHorizontalLine(id, value, color) {
+            if (!chartInstance) return;
+            chartInstance.options.plugins[id] = { id: id, beforeDraw: (chart) => { const ctx = chart.ctx; const yAxis = chart.scales.y; const yPos = yAxis.getPixelForValue(value); ctx.save(); ctx.beginPath(); ctx.moveTo(chart.chartArea.left, yPos); ctx.lineTo(chart.chartArea.right, yPos); ctx.lineWidth = 1.5; ctx.strokeStyle = color; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.restore(); } };
+            chartInstance.update();
+        }
+
+        function removeChartHorizontalLine(id) { if (!chartInstance) return; delete chartInstance.options.plugins[id]; chartInstance.update(); }
+
+        /* ==================== PORTFOLIO HASIL TRADE MODULE ==================== */
+        function initEquityChart() {
+            const ctx = document.getElementById('equity-history-chart').getContext('2d');
+            equityChartInstance = new Chart(ctx, {
+                type: 'line', data: { labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Hari Ini'], datasets: [{ label: 'Saldo ($)', data: [1000, 1025.50, 990.20, 1080.00, 1124.50], borderColor: '#3b82f6', borderWidth: 3, backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(39, 39, 42, 0.3)' } } } }
+            });
+        }
+
+        function renderTradeHistory() {
+            const container = document.getElementById('trade-history-container'); container.innerHTML = '';
+            tradeHistoryData.forEach(trade => {
+                let badgeClass = trade.status === 'WIN' ? 'bg-emerald-500/10 text-emerald-400' : (trade.status === 'LOSS' ? 'bg-red-500/10 text-red-400' : 'bg-zinc-800 text-zinc-400');
+                let iconClass = trade.status === 'WIN' ? 'fa-arrow-trend-up' : (trade.status === 'LOSS' ? 'fa-arrow-trend-down' : 'fa-minus');
+                let typeColor = trade.type === 'BUY' ? 'text-emerald-500' : 'text-red-500';
+                container.insertAdjacentHTML('beforeend', `<div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-3 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full ${badgeClass} border border-zinc-700 flex items-center justify-center"><i class="fa-solid ${iconClass} text-[10px]"></i></div><div><div class="flex items-center space-x-2"><span class="font-bold text-white text-xs">${trade.id}</span><span class="text-[9px] font-extrabold ${typeColor}">${trade.type}</span></div><span class="text-[9px] text-zinc-500 mt-0.5 block">${trade.date}</span></div></div><div class="text-right"><span class="block font-mono font-bold text-xs ${trade.status === 'WIN' ? 'text-emerald-400' : 'text-red-400'}">${trade.pips}</span><span class="text-[9px] text-zinc-500 mt-0.5 block">${trade.price} → ${trade.closePrice}</span></div></div>`);
+            });
+        }
+
+        /* ==================== ALGORITMA TA & MARKET SCANNER ==================== */
+        function calculateEMA(closes, period) {
+            if (closes.length < period) return Array(closes.length).fill(null); let ema = Array(closes.length).fill(null); let sum = 0; for (let i = 0; i < period; i++) sum += closes[i]; let prevEma = sum / period; ema[period - 1] = prevEma; const multiplier = 2 / (period + 1); for (let i = period; i < closes.length; i++) { const currentEma = (closes[i] - prevEma) * multiplier + prevEma; ema[i] = currentEma; prevEma = currentEma; } return ema;
+        }
+
+        function calculateRSI(closes, period = 14) {
+            if (closes.length <= period) return Array(closes.length).fill(50); let rsi = Array(closes.length).fill(null); let gains = [], losses = []; for (let i = 1; i < closes.length; i++) { let diff = closes[i] - closes[i - 1]; gains.push(diff > 0 ? diff : 0); losses.push(diff < 0 ? -diff : 0); } let avgGain = gains.slice(0, period).reduce((a, b) => a + b, 0) / period; let avgLoss = losses.slice(0, period).reduce((a, b) => a + b, 0) / period; rsi[period] = avgLoss === 0 ? 100 : 100 - (100 / (1 + (avgGain / avgLoss))); for (let i = period + 1; i < closes.length; i++) { avgGain = (avgGain * (period - 1) + gains[i - 1]) / period; avgLoss = (avgLoss * (period - 1) + losses[i - 1]) / period; rsi[i] = avgLoss === 0 ? 100 : 100 - (100 / (1 + (avgGain / avgLoss))); } return rsi;
+        }
+
+        function calculateATR(highs, lows, closes, period = 14) {
+            if (closes.length <= period) return 2.50; let trs = []; for (let i = 1; i < closes.length; i++) { let h_l = highs[i] - lows[i]; let h_cp = Math.abs(highs[i] - closes[i - 1]); let l_cp = Math.abs(lows[i] - closes[i - 1]); trs.push(Math.max(h_l, h_cp, l_cp)); } let atr = Array(closes.length).fill(null); let sum = trs.slice(0, period).reduce((a, b) => a + b, 0); atr[period] = sum / period; for (let i = period + 1; i < closes.length; i++) { atr[i] = ((atr[i - 1] * (period - 1)) + trs[i - 1]) / period; } return atr[closes.length - 1] || 2.50; 
+        }
+
+        async function scanLiveMarketSignals(isInit = false) {
+            try {
+                const [resH1, resM15, resM5] = await Promise.all([ fetch('https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=1h&limit=50'), fetch('https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=15m&limit=50'), fetch('https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=5m&limit=50') ]);
+                const klinesH1 = await resH1.json(); const klinesM15 = await resM15.json(); const klinesM5 = await resM5.json();
+                const closesH1 = klinesH1.map(k => parseFloat(k[4])); const closesM15 = klinesM15.map(k => parseFloat(k[4])); const closesM5 = klinesM5.map(k => parseFloat(k[4]));
+                const atr14H1 = calculateATR(klinesH1.map(k=>parseFloat(k[2])), klinesH1.map(k=>parseFloat(k[3])), closesH1, 14);
+                const currentRSI_H1 = calculateRSI(closesH1)[49]; const currentEMA9_H1 = calculateEMA(closesH1, 9)[49]; const currentEMA21_H1 = calculateEMA(closesH1, 21)[49];
+                
+                let signalH1 = evaluateIndicators(closesH1[49], currentRSI_H1, currentEMA9_H1, currentEMA21_H1, atr14H1, 'H1');
+                let signalM15 = evaluateIndicators(closesM15[49], calculateRSI(closesM15)[49], calculateEMA(closesM15, 9)[49], calculateEMA(closesM15, 21)[49], calculateATR(klinesM15.map(k=>parseFloat(k[2])), klinesM15.map(k=>parseFloat(k[3])), closesM15, 14), 'M15');
+                let signalM5 = evaluateIndicators(closesM5[49], calculateRSI(closesM5)[49], calculateEMA(closesM5, 9)[49], calculateEMA(closesM5, 21)[49], calculateATR(klinesM5.map(k=>parseFloat(k[2])), klinesM5.map(k=>parseFloat(k[3])), closesM5, 14), 'M5');
+
+                activeSignals = [signalH1, signalM15, signalM5];
+                document.getElementById('metric-rsi').innerHTML = `${currentRSI_H1.toFixed(2)} (Netral)`;
+                document.getElementById('metric-ema-trend').innerHTML = currentEMA9_H1 > currentEMA21_H1 ? '<span class="text-emerald-400">Bullish</span>' : '<span class="text-red-400">Bearish</span>';
+                document.getElementById('metric-atr').innerText = `$${atr14H1.toFixed(2)}`;
+                
+                const mainSig = activeSignals[0];
+                document.getElementById('latest-signal-type').innerHTML = mainSig.type === 'BUY' ? '<i class="fa-solid fa-arrow-up-long mr-1.5"></i> BUY' : '<i class="fa-solid fa-arrow-down-long mr-1.5"></i> SELL';
+                document.getElementById('latest-signal-type').className = mainSig.type === 'BUY' ? 'bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-lg text-sm font-bold flex items-center uppercase' : 'bg-red-500/10 text-red-400 px-3 py-1 rounded-lg text-sm font-bold flex items-center uppercase';
+                document.getElementById('signal-entry').innerText = `$${mainSig.entry.toFixed(2)}`; document.getElementById('signal-tp').innerText = `$${mainSig.tp.toFixed(2)}`; document.getElementById('signal-sl').innerText = `$${mainSig.sl.toFixed(2)}`; document.getElementById('signal-summary-text').innerText = mainSig.description;
+
+                const bullFactor = Math.round(((100 - currentRSI_H1) + (currentEMA9_H1 > currentEMA21_H1 ? 70 : 30)) / 2);
+                document.getElementById('sentiment-bull-pct').innerText = `${bullFactor}%`; document.getElementById('sentiment-bear-pct').innerText = `${100 - bullFactor}%`;
+                renderSignalsList(); calculateRecommendedLot();
+            } catch (err) {}
+        }
+
+        function evaluateIndicators(price, rsi, ema9, ema21, atr, timeframe) {
+            const isBullishTrend = ema9 > ema21; let type = 'BUY'; let description = '';
+            const cleanAtr = timeframe === 'M5' ? Math.max(0.60, Math.min(3.50, atr)) : Math.max(1.80, Math.min(8.00, atr));
+            if (isBullishTrend) { if (rsi >= 70) { type = 'SELL'; description = `Jenuh Beli. Koreksi turun.`; } else type = 'BUY'; description = `Tren Bullish solid.`; } 
+            else { if (rsi <= 30) { type = 'BUY'; description = `Jenuh Jual tajam. Pantulan naik.`; } else type = 'SELL'; description = `Tekanan Bearish mendominasi.`; }
+            const slOffset = cleanAtr * (timeframe === 'M5' ? 1.2 : 1.5); const tpOffset = cleanAtr * (timeframe === 'M5' ? 2.4 : 3.0);
+            return { id: 1, type: type, pair: 'XAU/USD', timeframe: timeframe, entry: parseFloat(price.toFixed(2)), tp: parseFloat((type === 'BUY' ? price + tpOffset : price - tpOffset).toFixed(2)), sl: parseFloat((type === 'BUY' ? price - slOffset : price + slOffset).toFixed(2)), pips: `+${Math.round(tpOffset * 100)} Pips`, active: true, description: description };
+        }
+
+        function renderSignalsList() {
+            const container = document.getElementById('signals-container'); container.innerHTML = '';
+            activeSignals.forEach(sig => {
+                const isBuy = sig.type === 'BUY'; const badgeColor = isBuy ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400';
+                container.insertAdjacentHTML('beforeend', `<div class="bg-zinc-900/80 border border-zinc-800 rounded-xl p-4 transition space-y-3"><div class="flex justify-between items-center"><div class="flex items-center space-x-2"><span class="${badgeColor} px-2 py-0.5 rounded text-[10px] font-bold">${sig.type}</span><span class="text-xs font-bold text-zinc-200">${sig.pair}</span></div><span class="bg-zinc-800 text-zinc-400 text-[10px] px-1.5 py-0.5 rounded font-mono">${sig.timeframe}</span></div><p class="text-[11px] text-zinc-400">${sig.description}</p><div class="grid grid-cols-3 gap-2 text-center text-[10px] font-mono"><div><span class="text-zinc-500 block">Entry</span><span class="text-zinc-300 font-bold">$${sig.entry.toFixed(2)}</span></div><div><span class="text-zinc-500 block">TP</span><span class="text-emerald-400 font-bold">$${sig.tp.toFixed(2)}</span></div><div><span class="text-zinc-500 block">SL</span><span class="text-red-400 font-bold">$${sig.sl.toFixed(2)}</span></div></div></div>`);
+            });
+        }
+
+        function calculateRecommendedLot() {
+            const riskMoney = (parseFloat(document.getElementById('calc-balance').value) || 1000) * ((parseFloat(document.getElementById('calc-risk').value) || 2) / 100);
+            let slSize = activeSignals.length > 0 ? Math.abs(activeSignals[0].entry - activeSignals[0].sl) : 4.00;
+            document.getElementById('recommended-lot').innerText = `${Math.max(0.01, riskMoney / (slSize * 100)).toFixed(2)} Lot`;
+        }
+
+        /* ==================== AI GENERATOR ==================== */
+        function parseMarkdown(md) {
+            let html = md.replace(/\*\*(.*?)\*\*/g, '<strong class="text-amber-400 font-bold">$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em class="italic text-zinc-300">$1</em>');
+            return html.replace(/\n/g, '<br>');
+        }
+
+        async function generateAILiveOutlook() {
+            const container = document.getElementById('ai-outlook-container');
+            
+            // CEK API KEY LOKAL DULU
+            if(!apiKey) {
+                openApiKeyModal();
+                triggerToast("API Key Diperlukan", "Mohon masukkan API Key terlebih dahulu.", "danger");
+                return;
+            }
+            
+            container.innerHTML = `<div class="flex flex-col items-center py-12"><div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div><p class="text-xs text-amber-500 mt-3 font-bold uppercase">Menganalisis Fundamental...</p></div>`;
+
+            try {
+                const sys = "Anda adalah analis emas global. Buat Daily Outlook ringkas untuk XAU/USD. Format Markdown.";
+                const userQ = `Harga live XAU/USD $${liveGoldPrice || 2350}. Berikan analisis makroekonomi hari ini.`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+                const res = await fetch(url, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: userQ }] }], systemInstruction: { parts: [{ text: sys }] } })
+                });
+                
+                if(!res.ok) throw new Error("Gagal mengambil data AI (Mungkin API Key Salah)");
+                const data = await res.json();
+                container.innerHTML = `<div class="space-y-4">${parseMarkdown(data.candidates[0].content.parts[0].text)}</div>`;
+                triggerToast('Analisis Berhasil', 'Outlook hari ini telah dimuat.', 'success');
+            } catch (err) {
+                container.innerHTML = `<div class="p-4 text-xs text-red-400 border border-red-500/20 bg-red-500/5 rounded-xl">Koneksi AI gagal. Periksa kembali API Key Anda.</div>`;
+            }
+        }
+
+        let chatHistory = [];
+        async function sendMessageToAITutor() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            input.value = '';
+
+            appendChatMessage(msg, 'user');
+            
+            // CEK API KEY LOKAL DULU
+            if(!apiKey) {
+                setTimeout(() => {
+                    appendChatMessage("Sistem mendeteksi Anda belum memasukkan API Key Gemini. Silakan klik ikon roda gigi di sudut kanan atas.", 'bot-error');
+                    openApiKeyModal();
+                }, 1000);
+                return;
+            }
+
+            chatHistory.push({ role: "user", parts: [{ text: msg }] });
+            
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                const res = await fetch(url, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: chatHistory, systemInstruction: { parts: [{ text: "Anda adalah Mentor AI AuraGold." }] } })
+                });
+                
+                const data = await res.json();
+                const text = data.candidates[0].content.parts[0].text;
+                chatHistory.push({ role: "model", parts: [{ text: text }] });
+                appendChatMessage(text, 'bot');
+            } catch (err) {
+                appendChatMessage("Koneksi bermasalah atau API Key tidak valid. Coba lagi.", 'bot-error');
+            }
+        }
+
+        function appendChatMessage(text, sender) {
+            const container = document.getElementById('chat-messages-container');
+            let box = '';
+            if (sender === 'user') {
+                box = `<div class="flex items-start space-x-2.5 max-w-[85%] self-end ml-auto flex-row-reverse"><div class="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0 mr-0 ml-2.5"><i class="fa-solid fa-user text-black text-[10px]"></i></div><div class="bg-amber-500/10 border border-amber-500/20 rounded-l-xl rounded-br-xl p-3 text-xs text-amber-200">${text}</div></div>`;
+            } else if (sender === 'bot') {
+                const cleanText = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong class="text-amber-400">$1</strong>');
+                box = `<div class="flex items-start space-x-2.5 max-w-[85%]"><div class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-robot text-amber-400 text-[10px]"></i></div><div class="bg-zinc-900/80 border border-zinc-800/60 rounded-r-xl rounded-bl-xl p-3 text-xs text-zinc-300">${cleanText}</div></div>`;
+            } else {
+                box = `<div class="flex items-start space-x-2.5 max-w-[85%]"><div class="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center"><i class="fa-solid fa-exclamation text-red-400 text-[10px]"></i></div><div class="bg-red-500/5 p-3 text-xs text-red-400 rounded-xl">${text}</div></div>`;
+            }
+            container.insertAdjacentHTML('beforeend', box);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function clearChat() {
+            chatHistory = [];
+            document.getElementById('chat-messages-container').innerHTML = '';
+            appendChatMessage('Sesi dibersihkan. Ada yang ingin ditanyakan?', 'bot');
+        }
+
+        function handleChatKeydown(e) { if (e.key === 'Enter') sendMessageToAITutor(); }
+
+        /* ==================== UI & TABS CONTROLS ==================== */
+        function switchTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white transition-all");
+            const activeBtn = document.getElementById(`btn-${tabName}`);
+            if (activeBtn) activeBtn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-amber-500 text-black shadow-md shadow-amber-500/20";
+
+            document.querySelectorAll('.mobile-tab-btn').forEach(btn => btn.classList.replace('text-amber-500', 'text-zinc-500'));
+            const activeMobileBtn = document.getElementById(`m-btn-${tabName}`);
+            if (activeMobileBtn) activeMobileBtn.classList.replace('text-zinc-500', 'text-amber-500');
+        }
+
+        function triggerToast(title, text, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            let bgClass = type === 'success' ? 'border-emerald-500/20 text-emerald-400' : (type === 'danger' ? 'border-red-500/20 text-red-400' : 'border-zinc-800 text-zinc-300');
+            toast.className = `p-4 rounded-xl border bg-[#111315] ${bgClass} shadow-lg text-xs flex items-start space-x-3 transition duration-300 transform translate-x-10 opacity-0 mb-2`;
+            toast.innerHTML = `<div><h5 class="font-bold mb-0.5">${title}</h5><p class="text-[11px]">${text}</p></div>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+            setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 4000);
+        }
+
+        function showLesson(id) {
+            document.querySelectorAll('.lesson-btn').forEach(btn => btn.className = "lesson-btn w-full text-left p-3 rounded-xl border border-zinc-800 text-zinc-400 text-xs flex justify-between");
+            document.getElementById(`lesson-btn-${id}`).className = "lesson-btn w-full text-left p-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 font-bold text-xs flex justify-between";
+            document.getElementById('lesson-content-container').innerHTML = lessons[id].content;
+        }
+
+        function showDisclaimer() { triggerToast("Disclaimer", "Sinyal ini adalah simulasi edukasi. Resiko finansial ditanggung sendiri.", "danger"); }
+
+        /* ==================== EBOOK MODAL ==================== */
+        let currentEbookId = null, currentChapterIdx = 0;
+        const premiumEbooks = {  
+            1: { title: "Price Action", chapters: [{num: "BAB 1", subtitle: "Naked Trading", text: "Fokus pada Support dan Resistance murni tanpa indikator teknikal lag."}] },
+            2: { title: "SMC Concepts", chapters: [{num: "BAB 1", subtitle: "Market Structure", text: "Membaca order flow dan likuiditas bank."}] },
+            3: { title: "Psikologi Trading", chapters: [{num: "BAB 1", subtitle: "Kendali Emosi", text: "Jangan biarkan FOMO menghancurkan akun Anda."}] }
+        };
+
+        function openEbook(id) {
+            currentEbookId = id; currentChapterIdx = 0;
+            document.getElementById('ebook-modal-title').innerText = premiumEbooks[id].title;
+            document.getElementById('ebook-modal-content').innerHTML = `<h4 class="text-amber-400 font-bold">${premiumEbooks[id].chapters[0].subtitle}</h4><p>${premiumEbooks[id].chapters[0].text}</p>`;
+            document.getElementById('ebook-reader-modal').classList.remove('hidden');
+        }
+        function closeEbook() { document.getElementById('ebook-reader-modal').classList.add('hidden'); }
+        function prevEbookChapter() { triggerToast("Info", "Berada di Bab Pertama", "info"); }
+        function nextEbookChapter() { closeEbook(); triggerToast("Selesai", "Anda menyelesaikan modul ini.", "success"); }
+
+        // Window Bindings
+        window.switchTab = switchTab;
+        window.toggleChartIndicator = toggleChartIndicator;
+        window.scanLiveMarketSignals = scanLiveMarketSignals;
+        window.generateAILiveOutlook = generateAILiveOutlook;
+        window.sendMessageToAITutor = sendMessageToAITutor;
+        window.clearChat = clearChat;
+        window.showLesson = showLesson;
+        window.showDisclaimer = showDisclaimer;
+        window.openEbook = openEbook;
+        window.closeEbook = closeEbook;
+        window.prevEbookChapter = prevEbookChapter;
+        window.nextEbookChapter = nextEbookChapter;
+        window.handleAuthGateSubmit = handleAuthGateSubmit;
+        window.activateVIPFromExpiredScreen = activateVIPFromExpiredScreen;
+        window.logoutMembership = logoutMembership;
+        window.handleChatKeydown = handleChatKeydown;
+        
+        // Window Binding For API Keys
+        window.openApiKeyModal = openApiKeyModal;
+        window.closeApiKeyModal = closeApiKeyModal;
+        window.saveApiKey = saveApiKey;
+        window.clearApiKey = clearApiKey;
+
+    </script>
+</body>
+</html>
